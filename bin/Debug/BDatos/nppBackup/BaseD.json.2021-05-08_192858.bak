@@ -1,0 +1,41 @@
+[
+  {
+    "DN": 1,
+    "SerialNumber": null,
+    "Model": "ZDC2911",
+    "CommunicationType": 1,
+    "Baudrate": 0,
+    "SerialPort": 0,
+    "Password": "0",
+    "IpPort": 5500,
+    "IpAddress": "10.104.1.213",
+    "Label": "softur S",
+    "ConnectionModel": 5
+  },
+  {
+    "DN": 1,
+    "SerialNumber": null,
+    "Model": "ZDC2911",
+    "CommunicationType": 1,
+    "Baudrate": 0,
+    "SerialPort": 0,
+    "Password": "0",
+    "IpPort": 5500,
+    "IpAddress": "10.104.1.213",
+    "Label": "softur S",
+    "ConnectionModel": 5
+  },
+  {
+    "DN": 1,
+    "SerialNumber": null,
+    "Model": "ZDC2911",
+    "CommunicationType": 1,
+    "Baudrate": 0,
+    "SerialPort": 0,
+    "Password": "0",
+    "IpPort": 5500,
+    "IpAddress": "10.104.1.213",
+    "Label": "softur S",
+    "ConnectionModel": 5
+  }
+]
