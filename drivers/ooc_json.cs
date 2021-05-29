@@ -18,10 +18,11 @@ namespace ooc_gest_Reloj.drivers
         string Sarvar_en;
 
 
-        public BDatos(string ruta = "./BDatos/BaseD.json")
+        public  BDatos(string ruta = "./BDatos/BaseD.json")
         {
             Sarvar_en = ruta;
             Cargar();
+            
         }
 
         public void Guardar()

@@ -2844,7 +2844,7 @@
     "IDNumber": null,
     "Sex": null,
     "Enable": true,
-    "Comment": "GARCIA GONZALEZ",
+    "Comment": "",
     "DeptId": "",
     "AttType": 0,
     "Birthday": "0001-01-01T00:00:00",

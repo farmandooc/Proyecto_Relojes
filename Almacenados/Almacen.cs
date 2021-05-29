@@ -24,5 +24,8 @@ static public class Almacen
 {
 
    static public Dictionary<string, BDatos<User>> Dispositivos_en_cache = new Dictionary<string, BDatos<User>>();
+    static public List<User> Diferencias = new List<User>();
+
+
 }
 //}

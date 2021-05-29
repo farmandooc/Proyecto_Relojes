@@ -17,10 +17,16 @@ using IConvert;
 using SysEnum;
 using Entity;
 using ooc_Extenciones;
+
+
+
 using ooc_gest_Reloj.drivers;
 using Newtonsoft.Json;
+
 using ooc_gest_Reloj.drivers;
 using ooc_gest_Reloj.Utiles;
+using System.IO;
+using System.Threading;
 #endregion Mis Usings
 
 namespace ooc_gest_Reloj.frm
@@ -29,7 +35,9 @@ namespace ooc_gest_Reloj.frm
     {
         ListView lvw_UserList = new ListView();
         BDatos<User> BDTrabajadores = new BDatos<User>("./BDatos/BDTrabajadores.json");
+        static private object Protegido = new object();
         string Titulo = "";
+        string Diferencias = $"./BDatos/diferencias.json";
         public xfrm_GetTrabajadores()
         {
             InitializeComponent();
@@ -51,13 +59,119 @@ namespace ooc_gest_Reloj.frm
             List<string> Objetivos = pc_Relojes.Controls.OfType<CheckBox>().Where(x => x.Checked == true).Select(x => x.Text).ToList();
             int Intentos = 0;
             string tmp_tit = Titulo;
+
+            var tareas = new List<Thread>();
+            string Titulo_groupBox = Relojes_Operaciones.Text;
+
+
             foreach (string reloj in Objetivos)
             {
 
-                Obtener_datos_de_un_reloj(reloj);
+                Simular_Obtener_datos_de_un_reloj(reloj);
+
+
+                string Est_Ant = $"./BDatos/{reloj}_Ant.json";
+                string Est_Atc = $"./BDatos/{reloj}.json";
+                ///Obtener_datos_de_un_reloj(reloj);
+                ///
+                try
+                {
+
+                    /// esto es para simular que ya se trajo la informacion del reloj en cuestion
+                    /// 
+                  //  Simular_Obtener_datos_de_un_reloj(reloj);
+                    
+                    Thread Hilo = new Thread(Comparar_Estados);
+                    Hilo.Name = reloj;
+                    tareas.Add(Hilo);
+                    Hilo.Start(reloj);
+
+
+
+                }
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show(ex.Message);
+                }
+
                 Titulo = tmp_tit;
 
             }
+
+            while (tareas.Where(x => x.IsAlive == true).Count() > 0)
+            {
+                lb_Barra_estado.Text = "comprobando cambios en: ";
+                foreach (Thread item in tareas.Where(x => x.IsAlive))
+                {
+                    lb_Barra_estado.Text += item.Name + "\t";
+                }
+
+           //     lb_Barra_estado.Text = $"";
+                Application.DoEvents();
+                Thread.Sleep(2000);
+            }
+
+
+            lb_Barra_estado.Text = "Tarea completada";
+            lb_Barra_estado.BackColor = Color.DarkGray;
+            lb_Barra_estado.ForeColor = Color.LightGreen;
+
+            string texto = JsonConvert.SerializeObject(Almacen.Diferencias, Formatting.Indented);
+            
+            Guardar_diferencias(texto);
+            Eliminar_estados_anteriores(tareas);
+
+        }
+        public void Eliminar_estados_anteriores(List<Thread> tareas) {
+            foreach (Thread tarea in tareas)
+            {
+                Eliminado_estado_anterior(tarea.Name);
+            }
+        }
+
+        private void Eliminado_estado_anterior(string name)
+        {
+            try
+            {
+                File.Delete($"./BDatos/{name}_Ant.json");
+            }
+            catch (Exception)
+            {
+
+                
+            }
+        }
+
+        public void Guardar_diferencias(string Dif)
+        {
+            if (Almacen.Diferencias.Count() != 0)
+            {
+                if (File.Exists(Diferencias))
+                {
+                    File.Delete(Diferencias);
+                }
+                File.WriteAllText(Diferencias, Dif);
+            }
+        }
+
+        private void Simular_Obtener_datos_de_un_reloj(object reloj)
+        {
+            string Simulador = $"./BDatos/simulacion_reloj/{reloj}.json";
+            string Est_Atc = $"./BDatos/{reloj}.json";
+            string Est_Ant = $"./BDatos/{reloj}_Ant.json";
+            try
+            {
+
+                File.Move(Est_Atc, Est_Ant);/// Renombrando fichero
+                File.Copy(Simulador, Est_Atc);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
 
 
@@ -218,7 +332,6 @@ namespace ooc_gest_Reloj.frm
 
         }
 
-
         public void Cargar_inf_Local()
         {
 
@@ -274,10 +387,92 @@ namespace ooc_gest_Reloj.frm
                 Asignar_Evento_(tmp_control);
             }
         }
-        #endregion Mis metodos 
+
+
+        public bool Compara_personas(User Persona1,User Persona2) {
+            bool salida = true;
+                
+
+
+            return salida;
+
+        }
+
+        void Comparar_Estados(object reloj)
+        {
+
+            string Est_Atc = $"./BDatos/{reloj}.json";
+            string Est_Ant = $"./BDatos/{reloj}_Ant.json";
+            BDatos<User> REst_Ant = new BDatos<User>(Est_Ant);
+            BDatos<User> REst_Act = new BDatos<User>(Est_Atc);
+            REst_Ant.Cargar();
+            REst_Act.Cargar();
+
+
+            foreach (User Trab in REst_Ant.Valores)
+            {
+
+                try
+                {
+                    User Trab_Act = REst_Act.Valores.Where(x => x.DIN == Trab.DIN).First<User>();
+                    if (!Trab.Es_Igual_A(Trab_Act))
+                    {
+
+                        lock (Protegido)
+                        {
+                            Almacen.Diferencias.Add(Trab_Act);
+                        }
+                    }
+
+                }
+                catch (Exception)
+                {
+
+
+                }
+            }
+
+           
+
+            /// Caso numero 1 (Se Agrego Un nuevo trabajador)
+            if (REst_Ant.Valores.Count() < REst_Act.Valores.Count())
+            {
+                List<ulong> Nuevos = (from T in REst_Act.Valores select T.DIN).Except(from t in REst_Ant.Valores select t.DIN).ToList<ulong>();
+                foreach (ulong id_nuevo in Nuevos)
+                {
+                    User U_Actual = REst_Act.Valores.Where(x => x.DIN == id_nuevo).First<User>();
+
+                }
+
+
+            }
+            /// Caso se elimino un trabajador 
+            /// Caso se agrego un nuevo trabajador y se elimino otro 
+            /// 
+
+
+
+        }
+
+        #endregion Fin de Mis metodos 
 
         private void pc_operaciones_Paint(object sender, PaintEventArgs e)
         {
+
+        }
+
+        private void gc_Trabajadoreso_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void sptn_Sinc_Relojes_Click(object sender, EventArgs e)
+        {
+            /// todo: Subir Informacion (de los trabajadores) A los Relojes Marcados 
+            /// 
+            /// 
+            /// 
+
 
         }
     }

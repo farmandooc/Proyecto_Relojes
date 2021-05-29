@@ -166,6 +166,7 @@
     <Compile Include="IConvert\ConvertObject.cs" />
     <Compile Include="ooc_Extenciones\extenciones.cs" />
     <Compile Include="ooc_Extenciones\MisExtenciones.cs" />
+    <Compile Include="ooc_Extenciones\ooc_RelojExtenciones.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SysEnum\UserPrivilege.cs" />
