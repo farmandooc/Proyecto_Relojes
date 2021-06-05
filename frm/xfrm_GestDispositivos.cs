@@ -97,6 +97,7 @@ namespace ooc_gest_Reloj.frm
 
             }
         }
+        
         private void Mostrar_Datos_relojes()
         {
             BD.Cargar();

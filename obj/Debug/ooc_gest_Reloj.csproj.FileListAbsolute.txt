@@ -128,3 +128,4 @@ A:\C Sharp\Reloj_proyecto\ooc_gest_Reloj\obj\Debug\ooc_gest_Reloj.frm.xfrm_GetTr
 A:\C Sharp\Reloj_proyecto\ooc_gest_Reloj\bin\Debug\CircularProgressBar.dll
 A:\C Sharp\Reloj_proyecto\ooc_gest_Reloj\bin\Debug\WinFormAnimation.dll
 A:\C Sharp\Reloj_proyecto\ooc_gest_Reloj\bin\Debug\CircularProgressBar.xml
+A:\C Sharp\Reloj_proyecto\ooc_gest_Reloj\bin\Debug\Bunifu_UI_v1.5.3.dll

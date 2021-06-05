@@ -174,6 +174,10 @@ namespace ooc_gest_Reloj.frm
 
         }
 
+        private void Subir_trabajador(Enroll  trabajador)
+        {
+            
+        }
 
         #region Mis Metodos 
         public void Obtener_datos_de_un_reloj(string reloj)
@@ -468,12 +472,48 @@ namespace ooc_gest_Reloj.frm
 
         private void sptn_Sinc_Relojes_Click(object sender, EventArgs e)
         {
+
+            object extraProperty = new object();
+            object extraData = new object();
+            extraData = Global.DeviceBusy;
+            
+
+            try
+            {
+               DeviceCommEty DC =  Util.Conectar_A_Reloj(7, "10.10.10.39","","0");// le paso 3 parametros por que asi la diferencio de la otra sobre carga 
+                DC.DeviceConnection.SetProperty(DeviceProperty.Enable, extraProperty, device, extraData);
+                object extraProperty_ = new object();
+                object extraData_ = new object();
+                User user = new User();
+                user.DIN = (UInt64)1;
+                user.UserName = "Test_nombre";
+                bool result = DC.DeviceConnection.SetProperty(UserProperty.UserName, extraProperty_, user, extraData_);
+                if (result)
+                {
+                    MessageBox.Show("Write FP Data Success", "Prompt", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Write FP Data Fail", "Prompt", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                //bool result = deviceConnection.SetProperty(DeviceProperty.Enable, extraProperty, device, extraData);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            Enroll Trabajador = new Enroll();
             /// todo: Subir Informacion (de los trabajadores) A los Relojes Marcados 
             /// 
             /// 
             /// 
-
+            Subir_trabajador(Trabajador);
 
         }
+
+        
     }
 }

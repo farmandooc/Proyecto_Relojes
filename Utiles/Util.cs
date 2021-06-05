@@ -98,6 +98,127 @@ namespace ooc_gest_Reloj.Utiles
             return true;
         }
 
+        public static DeviceCommEty Conectar_A_Reloj(int ID, string Ip, string Etiqueta = "", string Clave="0", int Puerto = 5500)
+        {
+            try
+            {
+
+
+                tmp_reloj = new Device();
+                tmp_reloj.DN = ID;
+                tmp_reloj.Password = (Clave.ooc_EstaNuloVacioEspacio()) ? "0" : Clave;
+                tmp_reloj.Label = (Etiqueta.ooc_EstaNuloVacioEspacio()) ? Ip : Etiqueta;
+                tmp_reloj.Model = "ZDC2911";
+                tmp_reloj.ConnectionModel = 5;
+
+
+
+                if (string.IsNullOrEmpty(Ip.Trim()))
+                {
+                    MessageBox.Show("Inserte Una direccion IP", "Prompt", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    
+                    return new DeviceCommEty();
+                }
+
+                if (false == ConvertObject.IsCorrenctIP(Ip.Trim()))
+                {
+                    MessageBox.Show("direccion IP no Validad", "Prompt", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    
+                    return new DeviceCommEty(); ;
+                }
+
+                tmp_reloj.IpAddress = Ip.Trim();
+                tmp_reloj.IpPort = Puerto;
+                tmp_reloj.CommunicationType = CommunicationType.Tcp;
+
+
+
+                ReloConeccion = DeviceConnection.CreateConnection(ref tmp_reloj);
+                if (ReloConeccion.Open() > 0)
+                {
+                    RelojEty = new DeviceCommEty();
+                    RelojEty.Device = tmp_reloj;
+                    RelojEty.DeviceConnection = ReloConeccion;
+
+                }
+
+                return RelojEty;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error de coneccion", ex.Message);
+                return new DeviceCommEty();
+
+            }
+        }
+        /// <summary>
+        /// recordar las propiedades del Usuario o trabajador 
+        /// ===========================================================================================
+        /// shareUser.DIN = (UInt64)nud_DIN.Value;
+        /// shareUser.Privilege = GetPrivilege();
+        /// shareUser.Enrolls[0].DIN = shareUser.DIN;
+        /// shareUser.Enrolls[0].Password = txt_Pwd.Text;
+        /// enrollType += Zd2911Utils.SetBit(0, 10); //password is 10, fp0-fp9, card is 11
+        /// shareUser.Enrolls[0].CardID = txt_Card.Text;
+        /// enrollType += Zd2911Utils.SetBit(0, 11); //password is 10, fp0-fp9, card is 11
+        /// shareUser.Enrolls[0].EnrollType = (EnrollType)enrollType;
+        /// shareUser.UserName = txt_UserName.Text;
+        /// shareUser.Comment = ExtInfoTextBox.Text;
+        /// shareUser.Enable = Convert.ToBoolean(userEnableComboBox.SelectedIndex);
+        /// shareUser.AttType = (int)userAttTypeIdNumericUpDown.Value;
+        /// shareUser.AccessControl = userAccessControlComboBox.SelectedIndex;
+        /// shareUser.AccessTimeZone = (int)userPassZoneNumericUpDown.Value;
+        /// shareUser.Department = (int)userDeptIdNumericUpDown.Value;
+        /// shareUser.UserGroup = (int)userGroupIdNumericUpDown.Value;
+        /// shareUser.ValidityPeriod = Convert.ToBoolean(userValidityPeriodComboBox.SelectedIndex);
+        /// shareUser.ValidDate = userStartDateTimePicker.Value;
+        /// shareUser.InvalidDate = userEndDateTimePicker.Value;
+        /// shareUser.Res = (uint)userResNumericUpDown.Value;
+        /// 
+        /// 
+        /// ___________________________________________________________________________________________
+        /// </summary>
+        /// <param name="dce"> tipo de dato que guarda la rfelacion entre el dipositivo y la coneccion </param>
+        /// <param name="shareUser"> Usuario que guarda la relacion de Trabajadores clase User</param>
+        /// <returns></returns>
+
+        public static DeviceCommEty Reloj_Agregar_nuevo_Trabajador(this DeviceCommEty dce, User shareUser)
+        {
+
+            object extraProperty = new object();
+            object extraData = new object();
+            extraData = false;
+            int enrollType = 0;
+
+            try
+            {
+                if (shareUser == null)
+                {
+                    shareUser = new User();
+                    shareUser.Enrolls = new List<Enroll>();
+                    Enroll enroll = new Enroll();
+                    shareUser.Enrolls.Add(enroll);
+                }
+
+
+                bool result = dce.DeviceConnection.SetProperty(UserProperty.Enroll, extraProperty, shareUser, extraData);
+                if (false == result)
+                {
+                    MessageBox.Show("Set user detail info. Fail", "Prompt", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return new DeviceCommEty();
+                }
+
+                MessageBox.Show("Set user detail info. Success", "Prompt", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+
+            return dce;
+        }
+
         public static bool Conectar_A_Reloj(int ID, string IP, string Etiketa = "", int Puerto = 5500, string Clave = "0")
         {
             try
