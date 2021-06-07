@@ -478,31 +478,63 @@ namespace ooc_gest_Reloj.frm
             extraData = Global.DeviceBusy;
             
 
+
             try
             {
-               DeviceCommEty DC =  Util.Conectar_A_Reloj(7, "10.10.10.39","","0");// le paso 3 parametros por que asi la diferencio de la otra sobre carga 
+               DeviceCommEty DC =  Util.Conectar_A_Reloj("10.10.10.39",7,"","0");// le paso 3 parametros por que asi la diferencio de la otra sobre carga 
                 DC.DeviceConnection.SetProperty(DeviceProperty.Enable, extraProperty, device, extraData);
                 object extraProperty_ = new object();
                 object extraData_ = new object();
-                User user = new User();
-                user.DIN = (UInt64)1;
-                user.UserName = "Test_nombre";
-                bool result = DC.DeviceConnection.SetProperty(UserProperty.UserName, extraProperty_, user, extraData_);
-                if (result)
-                {
-                    MessageBox.Show("Write FP Data Success", "Prompt", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Write FP Data Fail", "Prompt", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
+                int enrollType = 0;
+                User shareUser = new User();
+                shareUser.DIN = (UInt64)27;
+                shareUser.UserName = "luis tomasl";
+                //bool result = DC.DeviceConnection.SetProperty(UserProperty.UserName, extraProperty_, user, extraData_);
+                //// Ejemplo de prueba 
+                ///
+                Enroll enroll = new Enroll();
+                shareUser.Enrolls.Add(enroll);
+
+                //shareUser.DIN = (UInt64)3;
+                shareUser.Privilege = 8;// Util.GetPrivilege(3);
+                shareUser.Enrolls[0].DIN = shareUser.DIN;
+                shareUser.Enrolls[0].Password = "1111";
+                enrollType += Zd2911Utils.SetBit(0, 10); //password is 10, fp0-fp9, card is 11
+                shareUser.Enrolls[0].CardID = $"";
+                enrollType += Zd2911Utils.SetBit(0, 11); //password is 10, fp0-fp9, card is 11
+                shareUser.Enrolls[0].EnrollType = (EnrollType)enrollType;
+                //shareUser.UserName = txt_UserName.Text;
+                shareUser.Comment = $"Usuarios de prueba";
+                shareUser.Enable = Convert.ToBoolean(1);
+                shareUser.AttType = (int)0;
+                shareUser.AccessControl = -1;
+                shareUser.AccessTimeZone = (int)0;
+                shareUser.Department = (int)0;
+                shareUser.UserGroup = (int)0;
+                shareUser.ValidityPeriod = Convert.ToBoolean(1);
+                //shareUser.ValidDate = userStartDateTimePicker.Value;
+                //shareUser.InvalidDate = userEndDateTimePicker.Value;
+                shareUser.Res = (uint)0;
+
+
+                DC.Reloj_Agregar_nuevo_Trabajador(shareUser);
+
+
+                //if (result)
+                //{
+                //    MessageBox.Show("Write FP Data Success", "Prompt", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //}
+                //else
+                //{
+                //    MessageBox.Show("Write FP Data Fail", "Prompt", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                //}
                 //bool result = deviceConnection.SetProperty(DeviceProperty.Enable, extraProperty, device, extraData);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                MessageBox.Show(ex.Message);
             }
 
             Enroll Trabajador = new Enroll();
