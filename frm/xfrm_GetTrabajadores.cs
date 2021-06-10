@@ -79,8 +79,8 @@ namespace ooc_gest_Reloj.frm
 
                     /// esto es para simular que ya se trajo la informacion del reloj en cuestion
                     /// 
-                  //  Simular_Obtener_datos_de_un_reloj(reloj);
-                    
+                    //  Simular_Obtener_datos_de_un_reloj(reloj);
+
                     Thread Hilo = new Thread(Comparar_Estados);
                     Hilo.Name = reloj;
                     tareas.Add(Hilo);
@@ -107,7 +107,7 @@ namespace ooc_gest_Reloj.frm
                     lb_Barra_estado.Text += item.Name + "\t";
                 }
 
-           //     lb_Barra_estado.Text = $"";
+                //     lb_Barra_estado.Text = $"";
                 Application.DoEvents();
                 Thread.Sleep(2000);
             }
@@ -118,12 +118,13 @@ namespace ooc_gest_Reloj.frm
             lb_Barra_estado.ForeColor = Color.LightGreen;
 
             string texto = JsonConvert.SerializeObject(Almacen.Diferencias, Formatting.Indented);
-            
+
             Guardar_diferencias(texto);
             Eliminar_estados_anteriores(tareas);
 
         }
-        public void Eliminar_estados_anteriores(List<Thread> tareas) {
+        public void Eliminar_estados_anteriores(List<Thread> tareas)
+        {
             foreach (Thread tarea in tareas)
             {
                 Eliminado_estado_anterior(tarea.Name);
@@ -139,7 +140,7 @@ namespace ooc_gest_Reloj.frm
             catch (Exception)
             {
 
-                
+
             }
         }
 
@@ -174,9 +175,9 @@ namespace ooc_gest_Reloj.frm
 
         }
 
-        private void Subir_trabajador(Enroll  trabajador)
+        private void Subir_trabajador(Enroll trabajador)
         {
-            
+
         }
 
         #region Mis Metodos 
@@ -393,9 +394,10 @@ namespace ooc_gest_Reloj.frm
         }
 
 
-        public bool Compara_personas(User Persona1,User Persona2) {
+        public bool Compara_personas(User Persona1, User Persona2)
+        {
             bool salida = true;
-                
+
 
 
             return salida;
@@ -436,7 +438,7 @@ namespace ooc_gest_Reloj.frm
                 }
             }
 
-           
+
 
             /// Caso numero 1 (Se Agrego Un nuevo trabajador)
             if (REst_Ant.Valores.Count() < REst_Act.Valores.Count())
@@ -476,59 +478,41 @@ namespace ooc_gest_Reloj.frm
             object extraProperty = new object();
             object extraData = new object();
             extraData = Global.DeviceBusy;
-            
+
+            //Util.BD.Cargar("./BDatos/diferencias.json");
+            BDatos<User> diferencias = new BDatos<User>("./BDatos/diferencias.json");
+
+            foreach (User U_Actual in diferencias.Valores)
+            {
 
 
+                try
+                {
+                    DeviceCommEty DC = Util.Conectar_A_Reloj("10.10.10.39", 7, "", "0");// le paso 3 parametros por que asi la diferencio de la otra sobre carga 
+                    DC.DeviceConnection.SetProperty(DeviceProperty.Enable, extraProperty, device, extraData);
+                    DC.Reloj_Agregar_nuevo_Trabajador(U_Actual);
+
+                }
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show(ex.Message);
+                }
+
+          
+            }
+        }
+
+        private void sbtn_eliminar_trabajador_Click(object sender, EventArgs e)
+        {
+            object extraProperty = new object();
+            object extraData = new object();
+            extraData = Global.DeviceBusy;
             try
             {
-               DeviceCommEty DC =  Util.Conectar_A_Reloj("10.10.10.39",7,"","0");// le paso 3 parametros por que asi la diferencio de la otra sobre carga 
-                DC.DeviceConnection.SetProperty(DeviceProperty.Enable, extraProperty, device, extraData);
-                object extraProperty_ = new object();
-                object extraData_ = new object();
-                int enrollType = 0;
-                User shareUser = new User();
-                shareUser.DIN = (UInt64)27;
-                shareUser.UserName = "luis tomasl";
-                //bool result = DC.DeviceConnection.SetProperty(UserProperty.UserName, extraProperty_, user, extraData_);
-                //// Ejemplo de prueba 
-                ///
-                Enroll enroll = new Enroll();
-                shareUser.Enrolls.Add(enroll);
-
-                //shareUser.DIN = (UInt64)3;
-                shareUser.Privilege = 8;// Util.GetPrivilege(3);
-                shareUser.Enrolls[0].DIN = shareUser.DIN;
-                shareUser.Enrolls[0].Password = "1111";
-                enrollType += Zd2911Utils.SetBit(0, 10); //password is 10, fp0-fp9, card is 11
-                shareUser.Enrolls[0].CardID = $"";
-                enrollType += Zd2911Utils.SetBit(0, 11); //password is 10, fp0-fp9, card is 11
-                shareUser.Enrolls[0].EnrollType = (EnrollType)enrollType;
-                //shareUser.UserName = txt_UserName.Text;
-                shareUser.Comment = $"Usuarios de prueba";
-                shareUser.Enable = Convert.ToBoolean(1);
-                shareUser.AttType = (int)0;
-                shareUser.AccessControl = -1;
-                shareUser.AccessTimeZone = (int)0;
-                shareUser.Department = (int)0;
-                shareUser.UserGroup = (int)0;
-                shareUser.ValidityPeriod = Convert.ToBoolean(1);
-                //shareUser.ValidDate = userStartDateTimePicker.Value;
-                //shareUser.InvalidDate = userEndDateTimePicker.Value;
-                shareUser.Res = (uint)0;
-
-
-                DC.Reloj_Agregar_nuevo_Trabajador(shareUser);
-
-
-                //if (result)
-                //{
-                //    MessageBox.Show("Write FP Data Success", "Prompt", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //}
-                //else
-                //{
-                //    MessageBox.Show("Write FP Data Fail", "Prompt", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                //}
-                //bool result = deviceConnection.SetProperty(DeviceProperty.Enable, extraProperty, device, extraData);
+                DeviceCommEty DC = Util.Conectar_A_Reloj("10.10.10.39", 7, "", "0");// le paso 3 parametros por que asi la diferencio de la otra sobre carga 
+                DC.DeviceConnection.SetProperty(DeviceProperty.Enable, extraProperty, DC.Device, extraData);
+                DC.Reloj_Eliminar_un_Trabajador(27);
 
             }
             catch (Exception ex)
@@ -536,16 +520,6 @@ namespace ooc_gest_Reloj.frm
 
                 MessageBox.Show(ex.Message);
             }
-
-            Enroll Trabajador = new Enroll();
-            /// todo: Subir Informacion (de los trabajadores) A los Relojes Marcados 
-            /// 
-            /// 
-            /// 
-            Subir_trabajador(Trabajador);
-
         }
-
-        
     }
 }

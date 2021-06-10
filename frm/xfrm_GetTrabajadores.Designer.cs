@@ -32,6 +32,7 @@ namespace ooc_gest_Reloj.frm
             this.splitContainerControl1 = new DevExpress.XtraEditors.SplitContainerControl();
             this.Relojes_Operaciones = new DevExpress.XtraEditors.GroupControl();
             this.pc_operaciones = new DevExpress.XtraEditors.PanelControl();
+            this.sbtn_eliminar_trabajador = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton1 = new DevExpress.XtraEditors.SimpleButton();
             this.sptn_Sinc_Relojes = new DevExpress.XtraEditors.SimpleButton();
             this.sbtn_Cargar_All_Trabajadores = new DevExpress.XtraEditors.SimpleButton();
@@ -94,6 +95,7 @@ namespace ooc_gest_Reloj.frm
             // 
             // pc_operaciones
             // 
+            this.pc_operaciones.Controls.Add(this.sbtn_eliminar_trabajador);
             this.pc_operaciones.Controls.Add(this.simpleButton1);
             this.pc_operaciones.Controls.Add(this.sptn_Sinc_Relojes);
             this.pc_operaciones.Controls.Add(this.sbtn_Cargar_All_Trabajadores);
@@ -104,13 +106,26 @@ namespace ooc_gest_Reloj.frm
             this.pc_operaciones.TabIndex = 1;
             this.pc_operaciones.Paint += new System.Windows.Forms.PaintEventHandler(this.pc_operaciones_Paint);
             // 
+            // sbtn_eliminar_trabajador
+            // 
+            this.sbtn_eliminar_trabajador.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.sbtn_eliminar_trabajador.Dock = System.Windows.Forms.DockStyle.Top;
+            this.sbtn_eliminar_trabajador.ImageOptions.Image = global::ooc_gest_Reloj.Properties.Resources.Eliminar_trabajador_48x41;
+            this.sbtn_eliminar_trabajador.Location = new System.Drawing.Point(2, 165);
+            this.sbtn_eliminar_trabajador.Name = "sbtn_eliminar_trabajador";
+            this.sbtn_eliminar_trabajador.Size = new System.Drawing.Size(59, 52);
+            this.sbtn_eliminar_trabajador.TabIndex = 3;
+            this.sbtn_eliminar_trabajador.ToolTip = "Eliminar un trabajador de los dispositivos";
+            this.sbtn_eliminar_trabajador.ToolTipTitle = "Eliminar trabajador";
+            this.sbtn_eliminar_trabajador.Click += new System.EventHandler(this.sbtn_eliminar_trabajador_Click);
+            // 
             // simpleButton1
             // 
             this.simpleButton1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.simpleButton1.ImageOptions.Image = global::ooc_gest_Reloj.Properties.Resources.Sincronizar_relojes_desde_otro_48x55;
+            this.simpleButton1.ImageOptions.Image = global::ooc_gest_Reloj.Properties.Resources.Replicar_reloj_Hacia_otros_45x40;
             this.simpleButton1.Location = new System.Drawing.Point(2, 106);
             this.simpleButton1.Name = "simpleButton1";
-            this.simpleButton1.Size = new System.Drawing.Size(59, 72);
+            this.simpleButton1.Size = new System.Drawing.Size(59, 59);
             this.simpleButton1.TabIndex = 2;
             this.simpleButton1.ToolTip = "Obtener los trabajadores de los dispositivos ";
             // 
@@ -257,5 +272,6 @@ namespace ooc_gest_Reloj.frm
         private DevExpress.XtraGrid.GridControl gc_Trabajadoreso;
         private DevExpress.XtraGrid.Views.Grid.GridView gridView1;
         private DevExpress.XtraEditors.LabelControl lb_Barra_estado;
+        private DevExpress.XtraEditors.SimpleButton sbtn_eliminar_trabajador;
     }
 }

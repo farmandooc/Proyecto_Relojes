@@ -238,6 +238,21 @@
   <ItemGroup>
     <None Include="imagenes\Sincronizar_relojes_desde_otro-48x55.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\Eliminar_trabajador.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\Eliminar_trabajador-48x41.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\Replicar_reloj_Hacia_otros-48x41.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\Replicar_reloj_Hacia_otros.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\Replicar_reloj_Hacia_otros-45x40.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

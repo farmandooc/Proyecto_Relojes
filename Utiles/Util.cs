@@ -183,7 +183,7 @@ namespace ooc_gest_Reloj.Utiles
         /// <param name="shareUser"> Usuario que guarda la relacion de Trabajadores clase User</param>
         /// <returns></returns>
 
-        public static DeviceCommEty Reloj_Agregar_nuevo_Trabajador(this DeviceCommEty dce, User shareUser, int id_reloj = -0 ,string IP_reloj = "")
+        public static DeviceCommEty Reloj_Agregar_nuevo_Trabajador(this DeviceCommEty dce, User shareUser   )
         {
             object extraProperty = new object();
             object extraData = new object();
@@ -230,12 +230,13 @@ namespace ooc_gest_Reloj.Utiles
                 bool result = deviceConnection.SetProperty(UserProperty.Enroll, extraProperty, shareUser, extraData);
                 if (false == result)
                 {
-                    MessageBox.Show("Fallo", "Prompt", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    //MessageBox.Show("Fallo", "Prompt", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return new DeviceCommEty();
                 }
 
-                MessageBox.Show("OK", "Prompt", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            return dc;
+                //MessageBox.Show("OK", "Prompt", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                dce = dc;
+            return dce;
             }
             catch (Exception ex)
             {
@@ -244,8 +245,76 @@ namespace ooc_gest_Reloj.Utiles
             }
         }
 
+        public static DeviceCommEty Reloj_Eliminar_un_Trabajador(this DeviceCommEty dce, User trabajador) {
 
-public static int GetPrivilege(int rol)
+            try
+            {
+                object extraProperty = new object();
+                object extraData = new object();
+                extraData = (UInt64)trabajador.DIN;
+
+
+                DeviceCommEty dc = Util.Conectar_A_Reloj(dce.Device.IpAddress, dce.Device.DN, dce.Device.Label);
+
+                DeviceConnection deviceConnection = dc.DeviceConnection;
+                Device device = dc.Device;
+
+                dce = dc;
+                bool result = deviceConnection.SetProperty(DeviceProperty.Enrolls, extraProperty, device, extraData);
+                if (result)
+                {
+                    MessageBox.Show($"El trabajador {trabajador.UserName}-{trabajador.DIN}  ha sido Eliminado", "Prompt", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    
+                }
+                else
+                {
+                    MessageBox.Show("la operacion ha fallado", "Prompt", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return dce;
+        }
+
+        public static DeviceCommEty Reloj_Eliminar_un_Trabajador(this DeviceCommEty dce, UInt64 Id_trabajador)
+        {
+
+            try
+            {
+                object extraProperty = new object();
+                object extraData = new object();
+                extraData = (UInt64)Id_trabajador;
+
+
+                DeviceCommEty dc = Util.Conectar_A_Reloj(dce.Device.IpAddress, dce.Device.DN, dce.Device.Label);
+
+                DeviceConnection deviceConnection = dc.DeviceConnection;
+                Device device = dc.Device;
+
+                dce = dc;
+                bool result = deviceConnection.SetProperty(DeviceProperty.Enrolls, extraProperty, device, extraData);
+                if (result)
+                {
+                    MessageBox.Show($"El trabajador {Id_trabajador}  ha sido Eliminado", "Prompt", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                }
+                else
+                {
+                    MessageBox.Show("la operacion ha fallado", "Prompt", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return dce;
+        }
+
+        public static int GetPrivilege(int rol)
 {
     switch (rol)
     {

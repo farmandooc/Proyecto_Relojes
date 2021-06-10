@@ -83,6 +83,26 @@ namespace ooc_gest_Reloj.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Eliminar_trabajador {
+            get {
+                object obj = ResourceManager.GetObject("Eliminar_trabajador", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Eliminar_trabajador_48x41 {
+            get {
+                object obj = ResourceManager.GetObject("Eliminar_trabajador-48x41", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap get_relojes {
             get {
                 object obj = ResourceManager.GetObject("get_relojes", resourceCulture);
@@ -106,6 +126,36 @@ namespace ooc_gest_Reloj.Properties {
         internal static System.Drawing.Bitmap ico_alpha_Clock_32x32 {
             get {
                 object obj = ResourceManager.GetObject("ico_alpha_Clock_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Replicar_reloj_Hacia_otros {
+            get {
+                object obj = ResourceManager.GetObject("Replicar_reloj_Hacia_otros", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Replicar_reloj_Hacia_otros_45x40 {
+            get {
+                object obj = ResourceManager.GetObject("Replicar_reloj_Hacia_otros-45x40", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Replicar_reloj_Hacia_otros_48x41 {
+            get {
+                object obj = ResourceManager.GetObject("Replicar_reloj_Hacia_otros-48x41", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
